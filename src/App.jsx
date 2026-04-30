@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-// Use environment variable (best practice for Vercel)
 const API = import.meta.env.VITE_API_BASE_URL + "/api/v1";
 
 function App() {
@@ -9,14 +8,12 @@ function App() {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Fetch all profiles
   const fetchProfiles = async () => {
     setLoading(true);
     try {
       const res = await axios.get(`${API}/profiles/`, {
         withCredentials: true,
       });
-
       setProfiles(res.data.data || []);
     } catch (err) {
       console.error("Fetch error:", err);
@@ -25,7 +22,6 @@ function App() {
     }
   };
 
-  // Search profiles
   const searchProfiles = async () => {
     if (!query.trim()) {
       fetchProfiles();
@@ -38,7 +34,6 @@ function App() {
         params: { q: query },
         withCredentials: true,
       });
-
       setProfiles(res.data.data || []);
     } catch (err) {
       console.error("Search error:", err);
@@ -47,12 +42,13 @@ function App() {
     }
   };
 
-  // GitHub login
+  // ✅ FIXED LOGIN
   const login = () => {
-    window.location.href = `${API}/web/auth/github/login/`;
+    window.location.assign(
+      "https://profile-intelligence-service-api.onrender.com/api/v1/web/auth/github/login/"
+    );
   };
 
-  // Logout
   const logout = async () => {
     try {
       await axios.post(
@@ -66,7 +62,6 @@ function App() {
     }
   };
 
-  // Export CSV (fixed)
   const exportCSV = async () => {
     try {
       const res = await axios.get(`${API}/profiles/export/`, {
@@ -94,7 +89,6 @@ function App() {
     <div style={{ padding: "20px", fontFamily: "Arial" }}>
       <h1>Insighta Dashboard</h1>
 
-      {/* Auth Buttons */}
       <div style={{ marginBottom: "15px" }}>
         <button onClick={login} style={{ marginRight: "10px" }}>
           Login
@@ -102,7 +96,6 @@ function App() {
         <button onClick={logout}>Logout</button>
       </div>
 
-      {/* Search */}
       <div style={{ marginBottom: "20px" }}>
         <input
           type="text"
@@ -114,15 +107,12 @@ function App() {
         <button onClick={searchProfiles}>Search</button>
       </div>
 
-      {/* Export */}
       <div style={{ marginBottom: "20px" }}>
         <button onClick={exportCSV}>Export CSV</button>
       </div>
 
-      {/* Loading */}
       {loading && <p>Loading...</p>}
 
-      {/* Table */}
       <table border="1" style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
           <tr>
